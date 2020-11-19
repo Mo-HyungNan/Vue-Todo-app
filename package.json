@@ -1,0 +1,31 @@
+{
+  "name": "Vue-Todo-app",
+  "version": "1.0.0",
+  "description": "Vue Todo list app",
+  "main": "index.js",
+  "browserslist": [
+    "last 2 versions",
+    "ie >= 10"
+  ],
+  "scripts": {
+    "dev": "webpack-dev-server --mode development",
+    "build": "webpack --mode production",
+    "lint": "eslint --ext .js,.vue .",
+    "lint:fix": "eslint --fix --ext .js,.vue ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mo-HyungNan/Vue-Todo-app.git"
+  },
+  "keywords": [],
+  "author": "MOMO",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mo-HyungNan/Vue-Todo-app/issues"
+  },
+  "homepage": "https://github.com/Mo-HyungNan/Vue-Todo-app#readme",
+  "devDependencies": {
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.9"
+  }
+}
