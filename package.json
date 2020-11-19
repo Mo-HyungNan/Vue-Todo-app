@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/Mo-HyungNan/Vue-Todo-app#readme",
   "devDependencies": {
+    "@babel/core": "^7.6.4",
     "babel-loader": "^8.0.6",
     "css-loader": "^3.2.0",
     "vue-loader": "^15.7.2",

@@ -12,8 +12,20 @@ module.exports = {
     module: {
         rules: [
             {
-              test: /\.vue$/,
-              use: 'vue-loader'
+                test: /\.vue$/,
+                use: 'vue-loader'
+            },
+            {
+                test: /\.?js$/,
+                exclude: /node_modules/,
+                use: 'babel-loader'
+            },
+            {
+                test: /\.css$/,
+                use: [
+                    'vue-style-loader',
+                    'css-loader'
+                ]
             }
         ]
     },
