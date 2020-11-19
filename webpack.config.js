@@ -8,6 +8,9 @@ require('@babel/polyfill')
 
 module.exports = (env, opts) => {
     const config = {
+        resolve: {
+            extensions: ['.js', '.vue']
+        },
         entry: {
             app: [
                 '@babel/polyfill',
@@ -33,7 +36,8 @@ module.exports = (env, opts) => {
                     test: /\.css$/,
                     use: [
                         'vue-style-loader',
-                        'css-loader'
+                        'css-loader',
+                        'postcss-loader',
                     ]
                 },
                 {
@@ -41,6 +45,7 @@ module.exports = (env, opts) => {
                     use: [
                         'vue-style-loader',
                         'css-loader',
+                        'postcss-loader',
                         'sass-loader'
                     ]
                 }

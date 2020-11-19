@@ -16,5 +16,6 @@ export default {
 $color: blue;
 h1 {
     color: $color;
+    display: flex;
 }
 </style>
