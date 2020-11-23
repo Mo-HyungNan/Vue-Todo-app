@@ -25,16 +25,36 @@
       </div>
 
       <!-- ACTIONS -->
-      <div class="actions">
-        <input
-          v-model="allDone"
-          type="checkbox"
-        />
-        <button @click="clearCompleted">완료된 항목 삭제</button>
+      <div class="actions clearfix">
+        <label class="float--left">
+          <input
+            v-model="allDone"
+            type="checkbox"
+          />
+          <span class="icon"><i class="material-icons">done_all</i></span>
+        </label>
+        <div class="float--right clearfix">
+          <button
+            class="btn float--left"
+            @click="scrollToTop"
+          >
+            <i class="material-icons">expand_less</i>
+          </button>
+          <button
+            class="btn float--left"
+            @click="scrollToBottom"
+          >
+            <i class="material-icons">expand_more</i>
+          </button>
+          <button
+            class="btn btn--danger float--left"
+            @click="clearCompleted"
+          >
+            <i class="material-icons">delete_sweep</i>
+          </button>
+        </div>
       </div>
     </div>
-
-    <hr />
 
     <!-- LIST -->
     <div class="todo-app__list">
@@ -46,8 +66,6 @@
         @delete-todo="deleteTodo"
       />
     </div>
-
-    <hr />
 
     <!-- INSERT -->
     <todo-creator
@@ -67,8 +85,11 @@ import _findIndex from 'lodash/findIndex'
 import _assign from 'lodash/assign'
 import _cloneDeep from 'lodash/cloneDeep'
 import _forEachRight from 'lodash/forEachRight'
+import scrollTo from 'scroll-to'
+
 import TodoCreator from './TodoCreator'
 import TodoItem from './TodoItem'
+
 export default {
   name: 'TodoApp',
   components: {
@@ -118,11 +139,14 @@ export default {
     initDB () {
       const adapter = new LocalStorage('todo-app') // DB name
       this.db = low(adapter)
+
       const hasTodos = this.db
         .has('todos') // Collection name
         .value()
+
       // 기존에 저장된 DB가 있는지 확인
       if (hasTodos) {
+        // 깊은 배열 복사, `this.todos`를 수정할 때 `this.db.getState().todos`를 직접 참조하는 문제를 방지할 수 있습니다.
         this.todos = _cloneDeep(this.db.getState().todos)
       } else {
         // Local DB 초기화
@@ -141,16 +165,18 @@ export default {
         updatedAt: new Date(),
         done: false
       }
+
       try {
         // DB에 저장
         this.db
           .get('todos')
           .push(newTodo)
-          .write()
+          .write() // `todos` 배열을 반환합니다.
       } catch (error) {
         console.error(error)
         return
       }
+
       // 로컬(local)에 반영
       this.todos.push(newTodo)
     },
@@ -166,6 +192,7 @@ export default {
         console.error(error)
         return
       }
+
       // 로컬(local)에 반영
       // Lodash 라이브러리 활용
       const foundTodo = _find(this.todos, { id: todo.id })
@@ -182,6 +209,7 @@ export default {
         console.log(error)
         return
       }
+
       // 로컬(local)에 반영
       // Lodash 라이브러리 활용
       const foundIndex = _findIndex(this.todos, { id: todo.id })
@@ -194,9 +222,11 @@ export default {
           todo.done = checked
         })
         .write() // 수정된 `todos` 배열을 반환합니다.
+
       this.todos = _cloneDeep(newTodos)
     },
     clearCompleted () {
+      // Lodash 라이브러리 활용
       _forEachRight(this.todos, todo => {
         if (todo.done) {
           this.deleteTodo(todo)
@@ -205,13 +235,20 @@ export default {
     },
     changeFilter (filter) {
       this.filter = filter
+    },
+    scrollToBottom () {
+      scrollTo(
+        0,
+        document.body.scrollHeight
+      )
+    },
+    scrollToTop () {
+      scrollTo(0, 0)
     }
   }
 }
 </script>
 
 <style lang="scss">
-  button.active {
-    font-weight: 900;
-  }
+  @import "../scss/style";
 </style>
