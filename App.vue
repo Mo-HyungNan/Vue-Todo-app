@@ -1,13 +1,25 @@
 <template>
-  <todo-app />
+  <div>
+    <router-link
+      to="/"
+      class="to-home"
+    >
+      <i class="material-icons">home</i>
+    </router-link>
+    <router-view />
+  </div>
 </template>
 
 <script>
-import TodoApp from './components/TodoApp'
-
 export default {
-  components: {
-    TodoApp
+  created () {
+    
   }
 }
 </script>
+
+<style lang="scss">
+  .to-home.router-link-exact-active {
+    display: none;
+  }
+</style>

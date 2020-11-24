@@ -4,24 +4,24 @@
     <div class="todo-app__actions">
       <!-- FILTERS -->
       <div class="filters">
-        <button
-          :class="{ active: filter === 'all' }"
-          @click="changeFilter('all')"
+        <router-link
+          to="all"
+          tag="button"
         >
           모든 항목 ({{ todos.length }})
-        </button>
-        <button
-          :class="{ active: filter === 'active' }"
-          @click="changeFilter('active')"
+        </router-link>
+        <router-link
+          to="active"
+          tag="button"
         >
           해야 할 항목 ({{ activeCount }})
-        </button>
-        <button
-          :class="{ active: filter === 'completed' }"
-          @click="changeFilter('completed')"
+        </router-link>
+        <router-link
+          to="completed"
+          tag="button"
         >
           완료된 항목 ({{ completedCount }})
-        </button>
+        </router-link>
       </div>
 
       <!-- ACTIONS -->
@@ -87,8 +87,8 @@ import _cloneDeep from 'lodash/cloneDeep'
 import _forEachRight from 'lodash/forEachRight'
 import scrollTo from 'scroll-to'
 
-import TodoCreator from './TodoCreator'
-import TodoItem from './TodoItem'
+import TodoCreator from '~/components/TodoCreator'
+import TodoItem from '~/components/TodoItem'
 
 export default {
   name: 'TodoApp',
@@ -99,13 +99,12 @@ export default {
   data () {
     return {
       db: null,
-      todos: [],
-      filter: 'all'
+      todos: []
     }
   },
   computed: {
     filteredTodos () {
-      switch (this.filter) {
+      switch (this.$route.params.id) {
         case 'all':
         default:
           return this.todos
@@ -233,9 +232,6 @@ export default {
         }
       })
     },
-    changeFilter (filter) {
-      this.filter = filter
-    },
     scrollToBottom () {
       scrollTo(
         0,
@@ -250,5 +246,10 @@ export default {
 </script>
 
 <style lang="scss">
-  @import "../scss/style";
+  @import "scss/style";
+
+  .filters button.router-link-active {
+    background: royalblue;
+    color: white;
+  }
 </style>
