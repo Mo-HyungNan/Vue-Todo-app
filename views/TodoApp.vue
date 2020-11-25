@@ -8,7 +8,7 @@
           to="all"
           tag="button"
         >
-          모든 항목 ({{ todos.length }})
+          모든 항목 ({{ total }})
         </router-link>
         <router-link
           to="active"
@@ -62,21 +62,17 @@
         v-for="todo in filteredTodos"
         :key="todo.id"
         :todo="todo"
-        @update-todo="updateTodo"
-        @delete-todo="deleteTodo"
       />
     </div>
 
     <!-- INSERT -->
-    <todo-creator
-      class="todo-app__creator"
-      @create-todo="createTodo"
-    />
+    <todo-creator class="todo-app__creator" />
 
   </div>
 </template>
 
 <script>
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 import scrollTo from 'scroll-to'
 
 import TodoCreator from '~/components/TodoCreator'
@@ -89,17 +85,18 @@ export default {
     TodoItem
   },
   computed: {
-    filteredTodos () {
-      switch (this.$route.params.id) {
-        case 'all':
-        default:
-          return this.todos
-        case 'active':
-          return this.todos.filter(todo => !todo.done)
-        case 'completed':
-          return this.todos.filter(todo => todo.done)
-      }
-    },
+    // Helpers
+    ...mapState('todoApp', [
+      'db',
+      'todos'
+    ]),
+    ...mapGetters('todoApp', [
+      'filteredTodos',
+      'total',
+      'activeCount',
+      'completedCount'
+
+    ]),
     allDone: {
       get () {
         const length = this.todos.length
@@ -111,10 +108,25 @@ export default {
       }
     }
   },
+  watch: {
+    $route () {
+      // state.filter = this.$route.params.id
+      // this.$store.commit('todoApp/updateFilter', this.$route.params.id)
+      this.updateFilter(this.$route.params.id)
+    }
+  },
   created () {
     this.initDB()
   },
   methods: {
+    ...mapMutations('todoApp', [
+      'updateFilter'
+    ]),
+    ...mapActions('todoApp', [
+      'initDB',
+      'completeAll',
+      'clearCompleted'
+    ]),
     scrollToBottom () {
       scrollTo(
         0,
